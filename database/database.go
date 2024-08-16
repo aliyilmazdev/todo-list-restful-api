@@ -3,10 +3,11 @@ package database
 import (
 	"fmt"
 	"log"
-	"os/user"
 	"strconv"
 
 	"github.com/aliyilmazdev/todo-list-restful-api/config"
+	"github.com/aliyilmazdev/todo-list-restful-api/internal/todo"
+	"github.com/aliyilmazdev/todo-list-restful-api/internal/user"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
