@@ -1,15 +1,14 @@
 package middlewares
 
 import (
-	"github.com/aliyilmazdev/todo-list-restful-api/config"
 	jwtware "github.com/gofiber/contrib/jwt"
 	"github.com/gofiber/fiber/v2"
 )
 
-func NewAuthMiddleware() fiber.Handler {
+func NewAuthMiddleware(secret string) fiber.Handler {
 	return jwtware.New(jwtware.Config{
 	SigningKey: jwtware.SigningKey{
-		Key: []byte(config.Config("SECRET")),
+		Key: []byte(secret),
 	},		
 	ErrorHandler: authMiddlewareError,
 	})
