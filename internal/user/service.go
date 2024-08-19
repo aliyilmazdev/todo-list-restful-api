@@ -3,7 +3,7 @@ package user
 type Service interface {
 	GetUserByID(id string) (User, error)
 	GetUserByEmail(email string) (User, error)
-	Create(u User) (*User ,error)
+	Create(request RegisterRequest) (*User ,error)
 }
 
 type service struct {
@@ -14,7 +14,15 @@ func NewService(repository Repository) Service {
 	return &service{repository: repository}
 }
 
-func (s *service) Create(u User) (*User, error) {
+func (s *service) Create(request RegisterRequest) (*User, error) {
+	
+	u := User{
+		Email: request.Email,
+		Password: request.Password,
+		Name: request.Name,
+		Surname: request.Surname,
+	}
+
 	err := s.repository.Create(&u)
 
 	if err != nil {

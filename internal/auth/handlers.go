@@ -1,20 +1,25 @@
 package auth
 
 import (
-	"github.com/aliyilmazdev/todo-list-restful-api/internal/user"
 	"github.com/aliyilmazdev/todo-list-restful-api/pkg/presenter"
+	"github.com/go-playground/validator"
 	"github.com/gofiber/fiber/v2"
 )
 
-func RegisterHandler(service Service) fiber.Handler {
+func RegisterHandler(service Service, validate *validator.Validate) fiber.Handler {
 	return func(c *fiber.Ctx) error {
-	var user user.User
-	if err := c.BodyParser(&user); err != nil {
+	var registerRequest RegisterRequest
+	if err := c.BodyParser(&registerRequest); err != nil {
 		c.Status(fiber.StatusBadRequest)
 		return c.JSON(presenter.ErrorResponse(err))
 	}
 
-	res, err := service.Register(user)
+	if err := validate.Struct(registerRequest); err != nil {
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(presenter.ErrorResponse(err))
+	}
+
+	res, err := service.Register(registerRequest)
 
 	if err != nil {
 		c.Status(fiber.StatusBadRequest)

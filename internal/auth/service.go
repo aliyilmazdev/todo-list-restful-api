@@ -9,7 +9,7 @@ import (
 
 type Service interface {
 	Login(loginRequest LoginRequest) (*string, error)
-	Register(u user.User) (*string, error)
+	Register(request RegisterRequest) (*string, error)
 }
 
 type service struct {
@@ -39,9 +39,16 @@ func (s *service) Login(loginRequest LoginRequest) (*string, error) {
 	return &token, nil
 }
 
-func (s *service) Register(u user.User) (*string, error) {
+func (s *service) Register(request RegisterRequest) (*string, error) {
 
-	createdUser, err := s.userService.Create(u)
+	createUserRequest := user.RegisterRequest{
+		Email: request.Email,
+		Password: request.Password,
+		Name: request.Name,
+		Surname: request.Surname,
+	}
+
+	createdUser, err := s.userService.Create(createUserRequest)
 
 	if err != nil {
 		return nil, err
